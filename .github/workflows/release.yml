@@ -1,0 +1,226 @@
+# 毎日、NEUTRINO対応PRのソースを確かめ、前回の配布から変わっていれば Mac / Windows 版をビルドして Release を出す。
+# PR が本家にマージされていたら、ビルドせずに本家の Release ページへのリンクを出し、この workflow を無効にして止まる。
+name: NEUTRINO release
+
+on:
+  schedule:
+    - cron: "0 21 * * *"   # 毎日 06:00 JST
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "ソースが前回と同じでも作り直す"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: neutrino-release
+  cancel-in-progress: false
+
+env:
+  PR_REPO: openutau/OpenUtau
+  PR_NUMBER: "2136"
+  SRC_REPO: rokujyushi/OpenUtau
+  SRC_REF: neutrino
+  UPSTREAM_RELEASES: https://github.com/openutau/OpenUtau/releases
+  UPDATER_FILE: OpenUtau/ViewModels/UpdaterViewModel.cs
+  UPDATER_URL: https://api.github.com/repos/stakira/OpenUtau/releases?per_page=100
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      action: ${{ steps.r.outputs.action }}
+      sha: ${{ steps.r.outputs.sha }}
+      date: ${{ steps.r.outputs.date }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: r
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FORCE: ${{ inputs.force || false }}
+        run: |
+          set -euo pipefail
+          merged=$(gh api "repos/$PR_REPO/pulls/$PR_NUMBER" --jq .merged)
+          if [ "$merged" = "true" ]; then
+            echo "action=merged" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          sha=$(gh api "repos/$SRC_REPO/commits/$SRC_REF" --jq .sha)
+          date=$(gh api "repos/$SRC_REPO/commits/$sha" --jq '.commit.committer.date[:10]')
+          last=$(jq -r '.source_sha // ""' state/last-build.json)
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"; echo "date=$date" >> "$GITHUB_OUTPUT"
+          if [ "$sha" != "$last" ] || [ "$FORCE" = "true" ]; then
+            echo "action=build" >> "$GITHUB_OUTPUT"
+          else
+            echo "action=skip" >> "$GITHUB_OUTPUT"
+            echo "source unchanged: $sha"
+          fi
+      # 60日間 repo に動きが無いと GitHub が定期実行を止めるので、ソースが動かない時も月1回だけ記録を残す。
+      - if: steps.r.outputs.action == 'skip'
+        run: |
+          set -euo pipefail
+          age=$(( $(date +%s) - $(git log -1 --format=%ct) ))
+          if [ "$age" -gt $((30*86400)) ]; then
+            date -u +%Y-%m-%dT%H:%M:%SZ > state/last-check.txt
+            git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add state/last-check.txt && git commit -m "chore: keepalive check" && git push
+          fi
+
+  merged:
+    needs: check
+    if: needs.check.outputs.action == 'merged'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          note="NEUTRINO対応は本家OpenUtauに取り込まれました(openutau/OpenUtau#${PR_NUMBER})。今後は本家の配布版を使ってください: ${UPSTREAM_RELEASES}"
+          { echo "> [!IMPORTANT]"; echo "> ${note}"; echo "> この配布元の自動ビルドは終了しました。"; echo; cat README.md; } > README.new && mv README.new README.md
+          git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md && git commit -m "docs: 本家へのマージを案内して配布を終了" && git push
+          gh release create upstream-merged --target "$GITHUB_REF_NAME" --latest \
+            --title "本家OpenUtauに取り込まれました" \
+            --notes "${note}"$'\n\n'"この配布元の自動ビルドは終了しました。過去のビルドは下の Releases に残しています。"
+          gh workflow disable "${{ github.workflow }}"
+
+  mac:
+    needs: check
+    if: needs.check.outputs.action == 'build'
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with: { path: kit }
+      - uses: actions/checkout@v4
+        with: { repository: "${{ env.SRC_REPO }}", ref: "${{ needs.check.outputs.sha }}", path: src }
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: "10.0.x" }
+      - name: Check NEUTRINO support and redirect updater
+        working-directory: src
+        run: |
+          set -euo pipefail
+          test -f OpenUtau.Core/Neutrino/NeutrinoRenderer.cs
+          grep -qF "$UPDATER_URL" "$UPDATER_FILE" || { echo "::error::updater URL not found; upstream changed"; exit 1; }
+          sed -i '' "s#${UPDATER_URL}#https://api.github.com/repos/${GITHUB_REPOSITORY}/releases?per_page=100#" "$UPDATER_FILE"
+          ! grep -qF "$UPDATER_URL" "$UPDATER_FILE"
+      - name: Build
+        working-directory: src
+        run: |
+          set -euo pipefail
+          dotnet publish OpenUtau -c Release -r osx-arm64 --self-contained true -o bin/osx-arm64/ -p:Version=0.0.${{ github.run_number }}
+          dotnet msbuild OpenUtau -t:BundleApp -p:Configuration=Release -p:RuntimeIdentifier=osx-arm64 -p:UseAppHost=true -p:SelfContained=true -p:OutputPath=../bin/osx-arm64/ -p:Version=0.0.${{ github.run_number }}
+          cp OpenUtau/Assets/OpenUtau.icns bin/osx-arm64/publish/OpenUtau.app/Contents/Resources/ || true
+          codesign --force --deep -s - bin/osx-arm64/publish/OpenUtau.app
+          codesign --verify --deep --strict bin/osx-arm64/publish/OpenUtau.app
+      - name: Package dmg
+        env:
+          SOURCE_REPO: ${{ env.SRC_REPO }}
+          SOURCE_REF: ${{ env.SRC_REF }}
+          SOURCE_SHA: ${{ needs.check.outputs.sha }}
+          SOURCE_DATE: ${{ needs.check.outputs.date }}
+        run: |
+          set -euo pipefail
+          p=pkg/OpenUtau-NEUTRINO; mkdir -p "$p"
+          ditto src/bin/osx-arm64/publish/OpenUtau.app "$p/OpenUtau.app"
+          cp kit/packaging/mac/NEUTRINOを登録.command "$p/"; chmod +x "$p/NEUTRINOを登録.command"
+          kit/packaging/compose.sh mac > "$p/はじめにお読みください.md"
+          ln -s /Applications "$p/Applications"
+          # 登録スクリプトを仮のホームで試す
+          fake=$(mktemp -d); ne=$(mktemp -d)/NEUTRINO; mkdir -p "$ne/bin" "$ne/model/TEST"; touch "$ne/bin/neutrino" "$ne/model/TEST/info.toml"
+          HOME=$fake /bin/bash "$p/NEUTRINOを登録.command" "$ne"
+          test -L "$fake/Library/OpenUtau/Dependencies/NEUTRINO_v3" && grep -q "singer_type: neutrino" "$fake/Library/OpenUtau/Singers/NEUTRINO_TEST/character.yaml"
+          hdiutil create -volname OpenUtau-NEUTRINO -srcfolder "$p" -format UDZO -ov OpenUtau-NEUTRINO-macos-arm64.dmg
+          codesign -fs - OpenUtau-NEUTRINO-macos-arm64.dmg
+      - uses: actions/upload-artifact@v4
+        with: { name: mac, path: OpenUtau-NEUTRINO-macos-arm64.dmg, if-no-files-found: error }
+
+  windows:
+    needs: check
+    if: needs.check.outputs.action == 'build'
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with: { path: kit }
+      - uses: actions/checkout@v4
+        with: { repository: "${{ env.SRC_REPO }}", ref: "${{ needs.check.outputs.sha }}", path: src }
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: "10.0.x" }
+      - name: Check NEUTRINO support and redirect updater
+        working-directory: src
+        run: |
+          set -euo pipefail
+          test -f OpenUtau.Core/Neutrino/NeutrinoRenderer.cs
+          grep -qF "$UPDATER_URL" "$UPDATER_FILE" || { echo "::error::updater URL not found; upstream changed"; exit 1; }
+          sed -i "s#${UPDATER_URL}#https://api.github.com/repos/${GITHUB_REPOSITORY}/releases?per_page=100#" "$UPDATER_FILE"
+          ! grep -qF "$UPDATER_URL" "$UPDATER_FILE"
+      - name: Build
+        working-directory: src
+        run: |
+          set -euo pipefail
+          dotnet publish OpenUtau -c Release -r win-x64 --self-contained true -o ../pkg/OpenUtau-NEUTRINO/ -p:Version=0.0.${{ github.run_number }}
+          # 本家 CI と同じく DirectML を同梱する
+          curl -fsSL https://www.nuget.org/api/v2/package/Microsoft.AI.DirectML/1.15.4 -o dml.zip
+          mkdir dml && tar -xf dml.zip -C dml
+          cp dml/bin/x64-win/DirectML.dll ../pkg/OpenUtau-NEUTRINO/
+      - name: Package zip
+        env:
+          SOURCE_REPO: ${{ env.SRC_REPO }}
+          SOURCE_REF: ${{ env.SRC_REF }}
+          SOURCE_SHA: ${{ needs.check.outputs.sha }}
+          SOURCE_DATE: ${{ needs.check.outputs.date }}
+        run: |
+          set -euo pipefail
+          p=pkg/OpenUtau-NEUTRINO
+          test -f "$p/OpenUtau.exe"
+          cp kit/packaging/windows/register-neutrino.ps1 kit/packaging/windows/register-neutrino.bat "$p/"
+          kit/packaging/compose.sh windows > "$p/はじめにお読みください.md"
+      - name: Try the register script with a fake NEUTRINO
+        shell: pwsh
+        run: |
+          $ne = Join-Path $env:RUNNER_TEMP "NEUTRINO"
+          New-Item -ItemType Directory -Force -Path "$ne\bin", "$ne\model\TEST" | Out-Null
+          Set-Content "$ne\bin\NEUTRINO.exe" "x"; Set-Content "$ne\model\TEST\info.toml" 'version = "v3.2.2"'; Set-Content "$ne\model\TEST\t.bin" "x"
+          $t = Join-Path $env:RUNNER_TEMP "ou"; Copy-Item -Recurse pkg/OpenUtau-NEUTRINO $t
+          powershell -NoProfile -ExecutionPolicy Bypass -File "$t\register-neutrino.ps1" -Neutrino "`"$ne`""
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          if ((Get-Item "$t\Dependencies\NEUTRINO_v3").LinkType -ne "Junction") { exit 1 }
+          if (-not (Select-String -Quiet "singer_type: neutrino" "$t\Singers\NEUTRINO_TEST\character.yaml")) { exit 1 }
+          if (-not (Test-Path "$t\Singers\NEUTRINO_TEST\t.bin")) { exit 1 }
+          Remove-Item -Recurse -Force $t
+      - name: Zip
+        run: cd pkg && 7z a -tzip ../OpenUtau-NEUTRINO-win-x64.zip OpenUtau-NEUTRINO
+      - uses: actions/upload-artifact@v4
+        with: { name: windows, path: OpenUtau-NEUTRINO-win-x64.zip, if-no-files-found: error }
+
+  release:
+    needs: [check, mac, windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { path: dist, merge-multiple: true }
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_REPO: ${{ env.SRC_REPO }}
+          SOURCE_REF: ${{ env.SRC_REF }}
+          SOURCE_SHA: ${{ needs.check.outputs.sha }}
+          SOURCE_DATE: ${{ needs.check.outputs.date }}
+        run: |
+          set -euo pipefail
+          short=${SOURCE_SHA:0:8}
+          tag="neutrino-$(date -u +%Y%m%d)-${short}"
+          packaging/compose.sh all > notes.md
+          { echo; echo "## ファイル"; echo; echo '```'; (cd dist && sha256sum *); echo '```'; } >> notes.md
+          gh release create "$tag" dist/* --target "$GITHUB_REF_NAME" --latest \
+            --title "OpenUtau NEUTRINO対応版 ${SOURCE_DATE} (${short})" --notes-file notes.md
+          jq -n --arg sha "$SOURCE_SHA" --arg tag "$tag" --arg repo "$SOURCE_REPO" --arg ref "$SOURCE_REF" \
+            '{source_repo:$repo, source_ref:$ref, source_sha:$sha, release_tag:$tag}' > state/last-build.json
+          git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state/last-build.json && git commit -m "chore: ${tag} を配布" && git push
