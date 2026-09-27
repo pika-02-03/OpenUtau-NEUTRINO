@@ -2,6 +2,8 @@
 
 歌声エディタ OpenUtau で、NEUTRINO の歌声(ずんだもん等)を歌わせられるようにしたものです。画面で音符・歌詞・音程のカーブ・ビブラートを直せます。
 
+![OpenUtau でずんだもん (NEUTRINO) を編集している画面](docs/screenshot.webp)
+
 ## ダウンロード
 
 - **Mac**: [OpenUtau-NEUTRINO-macos-arm64.dmg](https://github.com/{{BUILD_REPO}}/releases/latest/download/OpenUtau-NEUTRINO-macos-arm64.dmg)
