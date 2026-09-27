@@ -4,6 +4,8 @@
 
 ## ダウンロード
 
+**使うには NEUTRINO 本体(v3.2以上)と歌声モデルが別に必要です。** 先に下の[前提条件](#前提条件)を確認してください。
+
 - **Mac (Apple Silicon)**: [OpenUtau-NEUTRINO-macos-arm64.dmg](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-macos-arm64.dmg)
 - **Windows (x64、未確認)**: [OpenUtau-NEUTRINO-win-x64.zip](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-win-x64.zip)
 - 過去の版と更新内容: [Releases](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases)
@@ -16,15 +18,29 @@
 - ソース: rokujyushi/OpenUtau の `neutrino` ブランチ、コミット [`203c44f5`](https://github.com/rokujyushi/OpenUtau/commit/203c44f5d1374697abfa69626a2b52a19627184b)(2026-09-13)。本家へのPR [openutau/OpenUtau#2136](https://github.com/openutau/OpenUtau/pull/2136)(作者 rokujyushi さん、未マージ)の中身です。
 - 公式の配布物ではなく、本家とも作者とも無関係な個人ビルドです。OpenUtauはMITライセンスです。
 - ソースには手を加えていません。例外はアプリの更新確認だけで、本家版(NEUTRINO非対応)へ上書きされないよう、確認先をこの配布元に差し替えています。
-- NEUTRINO本体と歌声モデルは入っていません。v3.2以上を [NEUTRINO公式サイト](https://studio-neutrino.com/) から各自入手してください。GPUは要りません。
-- 動作確認は Mac (Apple Silicon) + NEUTRINO Tau v3.2.2 + ZUNDAMON v3.2.2 だけです。ほかのモデルは登録できることだけ確認しています。
+- NEUTRINO本体と歌声モデルは入っていません。下の前提条件を見て、各自で用意してください。
 
 ## 導入方法
+
+### 前提条件
+
+使う前に、次の条件をすべて満たしている必要があります。
+
+| 項目 | 条件 |
+|---|---|
+| パソコン | Mac は Apple Silicon (M1以降)。Windows は 10 / 11 の 64bit (x64)。Intel Mac と ARM 版 Windows は非対応です。 |
+| NEUTRINO 本体 | **v3.2 以上 v4 未満**を、[NEUTRINO公式サイト](https://studio-neutrino.com/) から入手して展開済みであること。**自分の OS 用の版**(Mac なら Mac 版、Windows なら Windows 版)が必要です。v2 系と v4 以降は使えません。 |
+| 歌声モデル | 使いたいモデル(ずんだもん等)を NEUTRINO 本体の `model` フォルダに入れてあること。本体と同じ v3 系のモデルが必要です。 |
+| フォルダの形 | 公式の配布物をそのまま展開した形であること。NEUTRINO フォルダの中に `bin`・`model`・`settings` があり、`bin` に実行ファイル(Mac は `neutrino`、Windows は `NEUTRINO.exe`)があります。 |
+| そのほか | GPU・Python・.NET などの追加インストールは要りません。NEUTRINO 自体の動作条件と利用規約は公式サイトに従ってください。 |
+
+動作を確かめたのは Mac (Apple Silicon) + NEUTRINO Tau v3.2.2 + ZUNDAMON v3.2.2 だけです。Windows と、ほかのバージョン・モデルは確かめていません。
+
 
 ### Mac (Apple Silicon)
 
 1. **このビルドをダウンロード**: [OpenUtau-NEUTRINO-macos-arm64.dmg](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-macos-arm64.dmg) をクリックすると最新版がダウンロードされます(一覧は [Releases](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest))。
-2. **NEUTRINOをダウンロード**: [NEUTRINO公式サイト](https://studio-neutrino.com/) から Mac 版の本体と、使いたい歌声モデル(ずんだもん等)をダウンロードし、本体の説明どおりに展開します。展開したフォルダの中に `bin` と `model` があればOKです。場所はどこでも構いません。
+2. **NEUTRINOをダウンロード**: [NEUTRINO公式サイト](https://studio-neutrino.com/) から Mac 版の本体(v3.2以上)と歌声モデルをダウンロードし、前提条件の形に展開します。場所はどこでも構いません。すでに持っていれば不要です。
 3. ダウンロードした dmg を開き、`OpenUtau.app` を隣の Applications へドラッグします。
 4. ターミナル(Launchpad や Spotlight で「ターミナル」と検索すると出ます)を開き、次の1行を貼り付けて Enter を押します。署名のない配布物なので、これをしないと「壊れている」と表示されて開けません。本家OpenUtauの配布版と同じ手順です。
    ```
@@ -39,13 +55,12 @@
 
 登録スクリプトは NEUTRINO 本体とモデルに書き込みません。`~/Library/OpenUtau/` の `Dependencies/NEUTRINO_v3`(NEUTRINOへのリンク)と `Singers/NEUTRINO_<モデル名>/`(モデルへのリンクと歌手設定)を作るだけで、元に戻す時はこの2か所を消します。
 
-
 ### Windows (x64、未確認)
 
 Windows版は自動でビルドしているだけで、実機では一度も動かしていません。手順も確認していません。
 
 1. **このビルドをダウンロード**: [OpenUtau-NEUTRINO-win-x64.zip](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-win-x64.zip) をクリックすると最新版がダウンロードされます(一覧は [Releases](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest))。
-2. **NEUTRINOをダウンロード**: [NEUTRINO公式サイト](https://studio-neutrino.com/) から Windows 版の本体と、使いたい歌声モデル(ずんだもん等)をダウンロードし、本体の説明どおりに展開します。展開したフォルダの中に `bin` と `model` があればOKです。
+2. **NEUTRINOをダウンロード**: [NEUTRINO公式サイト](https://studio-neutrino.com/) から Windows 版の本体(v3.2以上)と歌声モデルをダウンロードし、前提条件の形に展開します。すでに持っていれば不要です。
 3. ダウンロードした zip を右クリックして「プロパティ」を開き、下の方に「許可する」のチェックがあればオンにして OK を押します。そのあと zip を右クリックして「すべて展開」します。展開したフォルダがそのまま OpenUtau の設定フォルダになります。
 4. フォルダ内の `register-neutrino.bat` をダブルクリックします。NEUTRINOのフォルダをそのウィンドウへドラッグしてEnterを押すと、`model\` の中の歌声がすべて登録されます。管理者権限は要りません。「Windows によって PC が保護されました」と出たら、「詳細情報」→「実行」で進めます。
 5. `OpenUtau.exe` を起動し、トラックの歌手で「ZUNDAMON (NEUTRINO)」などを選びます。

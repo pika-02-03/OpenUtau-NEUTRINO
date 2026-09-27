@@ -1,7 +1,7 @@
 ### Mac (Apple Silicon)
 
 1. **このビルドをダウンロード**: [OpenUtau-NEUTRINO-macos-arm64.dmg](https://github.com/{{BUILD_REPO}}/releases/latest/download/OpenUtau-NEUTRINO-macos-arm64.dmg) をクリックすると最新版がダウンロードされます(一覧は [Releases](https://github.com/{{BUILD_REPO}}/releases/latest))。
-2. **NEUTRINOをダウンロード**: [NEUTRINO公式サイト](https://studio-neutrino.com/) から Mac 版の本体と、使いたい歌声モデル(ずんだもん等)をダウンロードし、本体の説明どおりに展開します。展開したフォルダの中に `bin` と `model` があればOKです。場所はどこでも構いません。
+2. **NEUTRINOをダウンロード**: [NEUTRINO公式サイト](https://studio-neutrino.com/) から Mac 版の本体(v3.2以上)と歌声モデルをダウンロードし、前提条件の形に展開します。場所はどこでも構いません。すでに持っていれば不要です。
 3. ダウンロードした dmg を開き、`OpenUtau.app` を隣の Applications へドラッグします。
 4. ターミナル(Launchpad や Spotlight で「ターミナル」と検索すると出ます)を開き、次の1行を貼り付けて Enter を押します。署名のない配布物なので、これをしないと「壊れている」と表示されて開けません。本家OpenUtauの配布版と同じ手順です。
    ```

@@ -4,16 +4,16 @@
 set -euo pipefail
 d=$(cd "$(dirname "$0")" && pwd)
 case "$1" in
-  all)     parts="header usage-mac usage-windows usage-common"; title="" ;;
-  readme)  parts="readme-top header usage-mac usage-windows usage-common readme-bottom"; title="" ;;
-  mac)     parts="header usage-mac usage-common"; title="# OpenUtau NEUTRINO対応版 (Mac, Apple Silicon)" ;;
-  windows) parts="header usage-windows usage-common"; title="# OpenUtau NEUTRINO対応版 (Windows x64、未確認)" ;;
+  all)     parts="header requirements usage-mac usage-windows usage-common"; title="" ;;
+  readme)  parts="readme-top header requirements usage-mac usage-windows usage-common readme-bottom"; title="" ;;
+  mac)     parts="header requirements usage-mac usage-common"; title="# OpenUtau NEUTRINO対応版 (Mac, Apple Silicon)" ;;
+  windows) parts="header requirements usage-windows usage-common"; title="# OpenUtau NEUTRINO対応版 (Windows x64、未確認)" ;;
   *) echo "usage: $0 all|mac|windows|readme" >&2; exit 2 ;;
 esac
 {
   [ -n "$title" ] && printf '%s\n\n' "$title"
   for p in $parts; do
-    case "$p" in usage-mac|usage-windows) { [ "$1" = all ] || [ "$1" = readme ]; } && echo "## 導入方法" && echo ;; esac
+    case "$p" in requirements) { [ "$1" = all ] || [ "$1" = readme ]; } && echo "## 導入方法" && echo ;; esac
     cat "$d/$p.md"; echo
   done
 } | sed -e "s#{{SOURCE_REPO}}#${SOURCE_REPO}#g" -e "s#{{SOURCE_REF}}#${SOURCE_REF}#g" \
