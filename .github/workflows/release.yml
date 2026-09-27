@@ -66,7 +66,8 @@ jobs:
           if [ "$age" -gt $((30*86400)) ]; then
             date -u +%Y-%m-%dT%H:%M:%SZ > state/last-check.txt
             git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add state/last-check.txt && git commit -m "chore: keepalive check" && git push
+            git add state/last-check.txt && git commit -m "chore: keepalive check"
+            git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME"
           fi
 
   merged:
@@ -82,7 +83,8 @@ jobs:
           note="NEUTRINO対応は本家OpenUtauに取り込まれました(openutau/OpenUtau#${PR_NUMBER})。今後は本家の配布版を使ってください: ${UPSTREAM_RELEASES}"
           { echo "> [!IMPORTANT]"; echo "> ${note}"; echo "> この配布元の自動ビルドは終了しました。"; echo; cat README.md; } > README.new && mv README.new README.md
           git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md && git commit -m "docs: 本家へのマージを案内して配布を終了" && git push
+          git add README.md && git commit -m "docs: 本家へのマージを案内して配布を終了"
+          git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME"
           gh release create upstream-merged --target "$GITHUB_REF_NAME" --latest \
             --title "本家OpenUtauに取り込まれました" \
             --notes "${note}"$'\n\n'"この配布元の自動ビルドは終了しました。過去のビルドは下の Releases に残しています。"
@@ -167,7 +169,7 @@ jobs:
           dotnet publish OpenUtau -c Release -r win-x64 --self-contained true -o ../pkg/OpenUtau-NEUTRINO/ -p:Version=0.0.${{ github.run_number }}
           # 本家 CI と同じく DirectML を同梱する
           curl -fsSL https://www.nuget.org/api/v2/package/Microsoft.AI.DirectML/1.15.4 -o dml.zip
-          mkdir dml && tar -xf dml.zip -C dml
+          7z x -y -odml dml.zip > /dev/null
           cp dml/bin/x64-win/DirectML.dll ../pkg/OpenUtau-NEUTRINO/
       - name: Package zip
         env:
@@ -222,5 +224,7 @@ jobs:
             --title "OpenUtau NEUTRINO対応版 ${SOURCE_DATE} (${short})" --notes-file notes.md
           jq -n --arg sha "$SOURCE_SHA" --arg tag "$tag" --arg repo "$SOURCE_REPO" --arg ref "$SOURCE_REF" \
             '{source_repo:$repo, source_ref:$ref, source_sha:$sha, release_tag:$tag}' > state/last-build.json
+          packaging/compose.sh readme > README.md
           git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add state/last-build.json && git commit -m "chore: ${tag} を配布" && git push
+          git add state/last-build.json README.md && git commit -m "chore: ${tag} を配布"
+          git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME"
