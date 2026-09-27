@@ -4,9 +4,9 @@
 
 ## ダウンロード
 
-- **Mac (Apple Silicon)**: [OpenUtau-NEUTRINO-macos-arm64.dmg](../../releases/latest/download/OpenUtau-NEUTRINO-macos-arm64.dmg)
-- **Windows (x64、未確認)**: [OpenUtau-NEUTRINO-win-x64.zip](../../releases/latest/download/OpenUtau-NEUTRINO-win-x64.zip)
-- 過去の版と更新内容: [Releases](../../releases)
+- **Mac (Apple Silicon)**: [OpenUtau-NEUTRINO-macos-arm64.dmg](https://github.com/{{BUILD_REPO}}/releases/latest/download/OpenUtau-NEUTRINO-macos-arm64.dmg)
+- **Windows (x64、未確認)**: [OpenUtau-NEUTRINO-win-x64.zip](https://github.com/{{BUILD_REPO}}/releases/latest/download/OpenUtau-NEUTRINO-win-x64.zip)
+- 過去の版と更新内容: [Releases](https://github.com/{{BUILD_REPO}}/releases)
 
 ## このビルドについて
 

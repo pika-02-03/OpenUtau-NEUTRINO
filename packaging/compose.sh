@@ -18,5 +18,5 @@ esac
   done
 } | sed -e "s#{{SOURCE_REPO}}#${SOURCE_REPO}#g" -e "s#{{SOURCE_REF}}#${SOURCE_REF}#g" \
         -e "s#{{SOURCE_SHA}}#${SOURCE_SHA}#g" -e "s#{{SOURCE_SHORT}}#${SOURCE_SHA:0:8}#g" \
-        -e "s#{{SOURCE_DATE}}#${SOURCE_DATE}#g" \
+        -e "s#{{SOURCE_DATE}}#${SOURCE_DATE}#g" -e "s#{{BUILD_REPO}}#${BUILD_REPO:-${GITHUB_REPOSITORY:?BUILD_REPO or GITHUB_REPOSITORY}}#g" \
   | awk 'BEGIN{h=0} /^## 導入方法$/{if(h++)next} {print}'
