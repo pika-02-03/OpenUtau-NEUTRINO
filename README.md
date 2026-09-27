@@ -13,7 +13,7 @@
 
 歌声エディタ OpenUtau で NEUTRINO の歌声(ずんだもん等)を鳴らし、画面で音程・歌詞・ピッチカーブ・ビブラートを直せるようにした非公式ビルドです。
 
-- ソース: rokujyushi/OpenUtau の `neutrino` ブランチ、コミット [`203c44f5`](https://github.com/rokujyushi/OpenUtau/commit/203c44f5d1eab81fb3c8a54d0be98a7ab2c8f123)(2026-09-14)。本家へのPR [openutau/OpenUtau#2136](https://github.com/openutau/OpenUtau/pull/2136)(作者 rokujyushi さん、未マージ)の中身です。
+- ソース: rokujyushi/OpenUtau の `neutrino` ブランチ、コミット [`203c44f5`](https://github.com/rokujyushi/OpenUtau/commit/203c44f5d1374697abfa69626a2b52a19627184b)(2026-09-13)。本家へのPR [openutau/OpenUtau#2136](https://github.com/openutau/OpenUtau/pull/2136)(作者 rokujyushi さん、未マージ)の中身です。
 - 公式の配布物ではなく、本家とも作者とも無関係な個人ビルドです。OpenUtauはMITライセンスです。
 - ソースには手を加えていません。例外はアプリの更新確認だけで、本家版(NEUTRINO非対応)へ上書きされないよう、確認先をこの配布元に差し替えています。
 - NEUTRINO本体と歌声モデルは入っていません。v3.2以上を [NEUTRINO公式サイト](https://studio-neutrino.com/) から各自入手してください。GPUは要りません。
