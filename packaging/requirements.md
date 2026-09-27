@@ -1,14 +1,12 @@
-### 前提条件
+## 必要なもの
 
-使う前に、次の条件をすべて満たしている必要があります。
+| | Mac | Windows |
+|---|---|---|
+| パソコン | Apple Silicon (M1以降) | Windows 10 / 11 (64bit) |
+| NEUTRINO 本体 | **Mac 版** v3.2以上(v4 は不可) | **Windows 版** v3.2以上(v4 は不可) |
+| 歌声モデル | v3 用のモデルを NEUTRINO の `model` フォルダに入れたもの | 同じ |
 
-| 項目 | 条件 |
-|---|---|
-| パソコン | Mac は Apple Silicon (M1以降)。Windows は 10 / 11 の 64bit (x64)。Intel Mac と ARM 版 Windows は非対応です。 |
-| NEUTRINO 本体 | **v3.2 以上 v4 未満**を、[NEUTRINO公式サイト](https://studio-neutrino.com/) から入手して展開済みであること。**自分の OS 用の版**(Mac なら Mac 版、Windows なら Windows 版)が必要です。v2 系と v4 以降は使えません。 |
-| 歌声モデル | 使いたいモデル(ずんだもん等)を NEUTRINO 本体の `model` フォルダに入れてあること。本体と同じ v3 系のモデルが必要です。 |
-| フォルダの形 | 公式の配布物をそのまま展開した形であること。NEUTRINO フォルダの中に `bin`・`model`・`settings` があり、`bin` に実行ファイル(Mac は `neutrino`、Windows は `NEUTRINO.exe`)があります。 |
-| そのほか | GPU・Python・.NET などの追加インストールは要りません。NEUTRINO 自体の動作条件と利用規約は公式サイトに従ってください。 |
-
-動作を確かめたのは Mac (Apple Silicon) + NEUTRINO Tau v3.2.2 + ZUNDAMON v3.2.2 だけです。Windows と、ほかのバージョン・モデルは確かめていません。
+- NEUTRINO は [公式サイト](https://studio-neutrino.com/) から入手し、説明どおりに展開してください。展開したフォルダに `bin`・`model`・`settings` があれば大丈夫です。
+- GPU や Python などを追加で入れる必要はありません。
+- 動作を確かめたのは Mac + NEUTRINO v3.2.2 + ずんだもんだけです。
 

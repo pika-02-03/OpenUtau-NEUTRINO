@@ -14,6 +14,9 @@ if (-not (Test-Path (Join-Path $ne "bin\NEUTRINO.exe")) -or -not (Test-Path (Joi
 if (-not (Test-Path (Join-Path $ou "OpenUtau.exe"))) {
   Write-Host "このスクリプトは OpenUtau.exe と同じフォルダに置いて実行してください。"; exit 1
 }
+# ダウンロードしたファイルのブロックを外す (署名が無いため Windows に止められるのを防ぐ。中身は変えない)
+Get-ChildItem -Recurse -File $ou, $ne -ErrorAction SilentlyContinue | Unblock-File -ErrorAction SilentlyContinue
+Write-Host "ブロックを解除しました: $ou と $ne"
 $dep = Join-Path $ou "Dependencies"; $sing = Join-Path $ou "Singers"
 New-Item -ItemType Directory -Force -Path $dep, $sing | Out-Null
 $link = Join-Path $dep "NEUTRINO_v3"
@@ -23,6 +26,13 @@ if (Test-Path $link) {
   $item.Delete()
 }
 New-Item -ItemType Junction -Path $link -Target $ne | Out-Null
+# model\ から消えたモデルの登録を片付ける (この仕組みで作った NEUTRINO_* だけ)
+foreach ($d in Get-ChildItem $sing -Directory -Filter "NEUTRINO_*") {
+  $y = Join-Path $d.FullName "character.yaml"
+  if (-not ((Test-Path $y) -and (Select-String -Quiet "singer_type: neutrino" $y))) { continue }
+  $name = $d.Name.Substring(9)
+  if (-not (Test-Path (Join-Path $ne "model\$name\info.toml"))) { Remove-Item -Recurse -Force $d.FullName; Write-Host "モデルが無いので登録を外しました: $name" }
+}
 $utf8 = New-Object System.Text.UTF8Encoding($false)
 $n = 0
 foreach ($m in Get-ChildItem (Join-Path $ne "model") -Directory) {
@@ -40,4 +50,4 @@ foreach ($m in Get-ChildItem (Join-Path $ne "model") -Directory) {
   Write-Host "登録しました: $($m.Name) (NEUTRINO)"; $n++
 }
 if ($n -eq 0) { Write-Host "model\ の中に歌声モデルが見つかりませんでした。"; exit 1 }
-Write-Host "完了。OpenUtau を起動し直してください。"
+Write-Host "完了。OpenUtau を起動してください (開いていた場合は一度終了してから)。"

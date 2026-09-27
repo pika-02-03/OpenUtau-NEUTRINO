@@ -1,86 +1,75 @@
-# OpenUtau NEUTRINO対応版 (非公式ビルド)
+# OpenUtau NEUTRINO対応版(非公式)
 
-歌声エディタ [OpenUtau](https://github.com/openutau/OpenUtau) で [NEUTRINO](https://studio-neutrino.com/) の歌声(ずんだもん等)を鳴らし、画面で音程・歌詞・ピッチカーブ・ビブラートを直せるようにしたビルドを配布しています。
+歌声エディタ OpenUtau で、NEUTRINO の歌声(ずんだもん等)を歌わせられるようにしたものです。画面で音符・歌詞・音程のカーブ・ビブラートを直せます。
 
 ## ダウンロード
 
-**使うには NEUTRINO 本体(v3.2以上)と歌声モデルが別に必要です。** 先に下の[前提条件](#前提条件)を確認してください。
+- **Mac**: [OpenUtau-NEUTRINO-macos-arm64.dmg](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-macos-arm64.dmg)
+- **Windows**: [OpenUtau-NEUTRINO-win-x64.zip](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-win-x64.zip)(動作未確認)
+- 過去の版: [Releases](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases)
 
-- **Mac (Apple Silicon)**: [OpenUtau-NEUTRINO-macos-arm64.dmg](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-macos-arm64.dmg)
-- **Windows (x64、未確認)**: [OpenUtau-NEUTRINO-win-x64.zip](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-win-x64.zip)
-- 過去の版と更新内容: [Releases](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases)
+## はじめに読んでください
 
-## このビルドについて
+- **NEUTRINO は別に用意が必要です。** これには入っていません。下の「必要なもの」を見て、先に公式サイトから入手してください。
+- **最初は警告が出て開けません。** このビルドと NEUTRINO には、有料の「開発者の署名」が付いていないためです。Mac では「壊れているため開けません」「開発元を検証できません」、Windows では「Windows によって PC が保護されました」と出ます。下の手順どおりに進めれば解除できます。
+- **非公式です。** 本家 OpenUtau・NEUTRINO の開発元とは関係ありません。これについて本家へ問い合わせないでください。
 
+## 必要なもの
 
-歌声エディタ OpenUtau で NEUTRINO の歌声(ずんだもん等)を鳴らし、画面で音程・歌詞・ピッチカーブ・ビブラートを直せるようにした非公式ビルドです。
+| | Mac | Windows |
+|---|---|---|
+| パソコン | Apple Silicon (M1以降) | Windows 10 / 11 (64bit) |
+| NEUTRINO 本体 | **Mac 版** v3.2以上(v4 は不可) | **Windows 版** v3.2以上(v4 は不可) |
+| 歌声モデル | v3 用のモデルを NEUTRINO の `model` フォルダに入れたもの | 同じ |
 
-- ソース: rokujyushi/OpenUtau の `neutrino` ブランチ、コミット [`203c44f5`](https://github.com/rokujyushi/OpenUtau/commit/203c44f5d1374697abfa69626a2b52a19627184b)(2026-09-13)。本家へのPR [openutau/OpenUtau#2136](https://github.com/openutau/OpenUtau/pull/2136)(作者 rokujyushi さん、未マージ)の中身です。
-- 公式の配布物ではなく、本家とも作者とも無関係な個人ビルドです。OpenUtauはMITライセンスです。
-- ソースには手を加えていません。例外はアプリの更新確認だけで、本家版(NEUTRINO非対応)へ上書きされないよう、確認先をこの配布元に差し替えています。
-- NEUTRINO本体と歌声モデルは入っていません。下の前提条件を見て、各自で用意してください。
+- NEUTRINO は [公式サイト](https://studio-neutrino.com/) から入手し、説明どおりに展開してください。展開したフォルダに `bin`・`model`・`settings` があれば大丈夫です。
+- GPU や Python などを追加で入れる必要はありません。
+- 動作を確かめたのは Mac + NEUTRINO v3.2.2 + ずんだもんだけです。
 
 ## 導入方法
 
-### 前提条件
+### Mac
 
-使う前に、次の条件をすべて満たしている必要があります。
-
-| 項目 | 条件 |
-|---|---|
-| パソコン | Mac は Apple Silicon (M1以降)。Windows は 10 / 11 の 64bit (x64)。Intel Mac と ARM 版 Windows は非対応です。 |
-| NEUTRINO 本体 | **v3.2 以上 v4 未満**を、[NEUTRINO公式サイト](https://studio-neutrino.com/) から入手して展開済みであること。**自分の OS 用の版**(Mac なら Mac 版、Windows なら Windows 版)が必要です。v2 系と v4 以降は使えません。 |
-| 歌声モデル | 使いたいモデル(ずんだもん等)を NEUTRINO 本体の `model` フォルダに入れてあること。本体と同じ v3 系のモデルが必要です。 |
-| フォルダの形 | 公式の配布物をそのまま展開した形であること。NEUTRINO フォルダの中に `bin`・`model`・`settings` があり、`bin` に実行ファイル(Mac は `neutrino`、Windows は `NEUTRINO.exe`)があります。 |
-| そのほか | GPU・Python・.NET などの追加インストールは要りません。NEUTRINO 自体の動作条件と利用規約は公式サイトに従ってください。 |
-
-動作を確かめたのは Mac (Apple Silicon) + NEUTRINO Tau v3.2.2 + ZUNDAMON v3.2.2 だけです。Windows と、ほかのバージョン・モデルは確かめていません。
-
-
-### Mac (Apple Silicon)
-
-1. **このビルドをダウンロード**: [OpenUtau-NEUTRINO-macos-arm64.dmg](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-macos-arm64.dmg) をクリックすると最新版がダウンロードされます(一覧は [Releases](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest))。
-2. **NEUTRINOをダウンロード**: [NEUTRINO公式サイト](https://studio-neutrino.com/) から Mac 版の本体(v3.2以上)と歌声モデルをダウンロードし、前提条件の形に展開します。場所はどこでも構いません。すでに持っていれば不要です。
-3. ダウンロードした dmg を開き、`OpenUtau.app` を隣の Applications へドラッグします。
-4. ターミナル(Launchpad や Spotlight で「ターミナル」と検索すると出ます)を開き、次の1行を貼り付けて Enter を押します。署名のない配布物なので、これをしないと「壊れている」と表示されて開けません。本家OpenUtauの配布版と同じ手順です。
-   ```
-   xattr -rc /Applications/OpenUtau.app
-   ```
-5. dmgを開いたまま、ターミナルで次の1行を実行します。NEUTRINOのフォルダをそのウィンドウへドラッグしてEnterを押すと、`model/` の中の歌声がすべて登録されます。
+1. **ダウンロード**: [Mac 用の dmg](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-macos-arm64.dmg) と、[NEUTRINO 公式サイト](https://studio-neutrino.com/) から Mac 版の NEUTRINO と歌声モデルをダウンロードします。NEUTRINO は展開して、好きな場所に置きます。
+2. **インストール**: dmg を開き、`OpenUtau.app` を隣の「Applications」へドラッグします。**まだ起動せず、dmg も開いたままにしておきます。**
+3. **警告の解除と登録**: 「ターミナル」を開きます(Spotlight で「ターミナル」と検索)。次の1行を貼り付けて Enter を押します。
    ```
    bash /Volumes/OpenUtau-NEUTRINO/NEUTRINOを登録.command
    ```
-6. OpenUtauを起動し、トラックの歌手で「ZUNDAMON (NEUTRINO)」などを選びます。音素変換器とレンダラは自動で「NEUTRINO」になります。
-7. ピアノロールに音符と歌詞を入れて再生します。MusicXMLはウィンドウへドラッグすれば読み込めます。読み込み後に歌手が空なら選び直してください。
+   「NEUTRINO のフォルダをドラッグして」と出たら、NEUTRINO のフォルダをターミナルへドラッグして Enter を押します。これで OpenUtau と NEUTRINO の警告が解除され、歌声が登録されます。
+4. **使う**: OpenUtau を起動します。トラックの歌手で「ZUNDAMON (NEUTRINO)」などを選び、音符と歌詞を入れて再生します。MusicXML はウィンドウへドラッグすれば読み込めます。
 
-登録スクリプトは NEUTRINO 本体とモデルに書き込みません。`~/Library/OpenUtau/` の `Dependencies/NEUTRINO_v3`(NEUTRINOへのリンク)と `Singers/NEUTRINO_<モデル名>/`(モデルへのリンクと歌手設定)を作るだけで、元に戻す時はこの2か所を消します。
+### Windows(動作未確認)
 
-### Windows (x64、未確認)
+Windows 版は自動でビルドしているだけで、実際の Windows では試していません。
 
-Windows版は自動でビルドしているだけで、実機では一度も動かしていません。手順も確認していません。
+1. **ダウンロード**: [Windows 用の zip](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-win-x64.zip) と、[NEUTRINO 公式サイト](https://studio-neutrino.com/) から Windows 版の NEUTRINO と歌声モデルをダウンロードします。
+2. **ブロックの解除と展開**: ダウンロードした zip(このビルドと NEUTRINO の両方)を右クリックして「プロパティ」を開き、下の「許可する」にチェックを入れて OK を押します。そのあと右クリックして「すべて展開」します。
+3. **登録**: 展開した OpenUtau のフォルダにある `register-neutrino.bat` をダブルクリックします。「PC が保護されました」と出たら「詳細情報」→「実行」を押します。NEUTRINO のフォルダをウィンドウへドラッグして Enter を押すと、歌声が登録されます。
+4. **使う**: 同じフォルダの `OpenUtau.exe` を起動します。トラックの歌手で「ZUNDAMON (NEUTRINO)」などを選び、音符と歌詞を入れて再生します。
 
-1. **このビルドをダウンロード**: [OpenUtau-NEUTRINO-win-x64.zip](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-win-x64.zip) をクリックすると最新版がダウンロードされます(一覧は [Releases](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest))。
-2. **NEUTRINOをダウンロード**: [NEUTRINO公式サイト](https://studio-neutrino.com/) から Windows 版の本体(v3.2以上)と歌声モデルをダウンロードし、前提条件の形に展開します。すでに持っていれば不要です。
-3. ダウンロードした zip を右クリックして「プロパティ」を開き、下の方に「許可する」のチェックがあればオンにして OK を押します。そのあと zip を右クリックして「すべて展開」します。展開したフォルダがそのまま OpenUtau の設定フォルダになります。
-4. フォルダ内の `register-neutrino.bat` をダブルクリックします。NEUTRINOのフォルダをそのウィンドウへドラッグしてEnterを押すと、`model\` の中の歌声がすべて登録されます。管理者権限は要りません。「Windows によって PC が保護されました」と出たら、「詳細情報」→「実行」で進めます。
-5. `OpenUtau.exe` を起動し、トラックの歌手で「ZUNDAMON (NEUTRINO)」などを選びます。
-6. ピアノロールに音符と歌詞を入れて再生します。
+## 困ったとき
 
-登録スクリプトは NEUTRINO 本体とモデルに書き込みません。展開したフォルダの中に `Dependencies\NEUTRINO_v3`(NEUTRINOへのジャンクション)と `Singers\NEUTRINO_<モデル名>\`(モデルのハードリンク。別ドライブならコピー)と歌手設定を作るだけです。
+- **音程が定規で引いたように平ら**: 普通に1回再生したあと、音符を全部選び、「ノート」メニューの「レンダリング済みピッチの読み込み」を押します。NEUTRINO 本来の自然な音程になり、その上からしゃくりやビブラートを手で足せます。音符や歌詞を変えたら、その部分だけもう一度読み込みます。
+- **Mac で警告が出て開けない**: 手順3の1行をもう一度実行します。それでも開けない時は、「システム設定」→「プライバシーとセキュリティ」を開き、下の方にある「このまま開く」を押します。
+- **Mac でモデルを足した・消した**: 手順3の1行をもう一度実行し、OpenUtau を起動し直します。
+- **Mac で登録を外したい**: dmg を開いてターミナルで次の1行を実行します。登録で作ったものだけを消し、NEUTRINO と作った作品は消しません。アプリ本体は `OpenUtau.app` をゴミ箱へ入れれば消えます。
+  ```
+  bash /Volumes/OpenUtau-NEUTRINO/NEUTRINOの登録を解除.command
+  ```
+- **Windows で警告が出て開けない**: 「詳細情報」→「実行」を押します。毎回出る時は、手順2のブロックの解除をしてから展開し直します。
+- **Windows でモデルを足した・消した**: `register-neutrino.bat` をもう一度実行し、OpenUtau を起動し直します。
+- **Windows で登録を外したい**: `unregister-neutrino.bat` をダブルクリックします。登録で作ったものだけを消し、NEUTRINO は消しません。そのあと OpenUtau のフォルダごと削除すれば、すべて消えます。
 
-### 音程が定規で引いたようになる時
+## このビルドについて
 
-既定のままだと、NEUTRINOが作った自然な音程カーブの代わりに、画面上の直線的なピッチ線で歌います。
-
-- **レンダリング済みピッチの読み込み**(おすすめ): 一度再生したあと、音符を全選択し、ノートメニューの「レンダリング済みピッチの読み込み」を実行します。NEUTRINOのカーブが編集できる線として取り込まれ、その上からしゃくりやビブラートを足せます。音符の長さや歌詞を変えたら、その部分だけ読み込み直します。
-- **direct をオン**: 表情パラメータの direct をオンにすると、NEUTRINOのカーブをそのまま使います。そのかわり画面で描いたピッチやビブラートは効きません。
+- 中身は、本家へ出ている NEUTRINO 対応の提案 [openutau/OpenUtau#2136](https://github.com/openutau/OpenUtau/pull/2136)(作者 rokujyushi さん、まだ本家に入っていません)です。rokujyushi/OpenUtau の `neutrino` ブランチ、コミット [`203c44f5`](https://github.com/rokujyushi/OpenUtau/commit/203c44f5d1374697abfa69626a2b52a19627184b)(2026-09-13)をそのままビルドしています。
+- 変えたのはアプリの「更新の確認」だけです。本家版(NEUTRINO 非対応)に上書きされないよう、確認先をこの配布元にしています。
+- 登録スクリプトは、NEUTRINO の中身を変えません。警告の印を外し、OpenUtau の設定フォルダにリンクと歌手の設定を置くだけです。
+- OpenUtau は MIT ライセンスです。NEUTRINO の利用規約は公式サイトに従ってください。
 
 ## 自動更新の仕組み
 
-このブランチ (`release-kit`) には配布用の設定だけがあり、OpenUtau のソースは持っていません。ビルドはすべて GitHub Actions の Mac / Windows マシンで行っています。
-
-- 毎日 06:00 (日本時間) に [`.github/workflows/release.yml`](.github/workflows/release.yml) が `neutrino` ブランチの最新コミットを確かめます。前回の配布から変わっていれば、Mac 版と Windows 版をビルドして新しい Release を出します。
-- PR が本家にマージされたら、ビルドせずに本家の Release ページへのリンクを出し、自動ビルドを止めます。
-- 使い方の文章は [`packaging/`](packaging) の部品1か所にあり、この README・Release 本文・配布物に同梱の説明書は、そこから組み立てています。
-- 最後に配布したソースは [`state/last-build.json`](state/last-build.json) に記録しています。
-
+- 毎朝6時(日本時間)に、元のブランチが更新されていないかを GitHub Actions が確かめます。更新されていれば Mac 版と Windows 版をビルドし、新しい Release を出します。
+- 提案が本家に取り込まれたら、ビルドをやめ、本家の [Releases](https://github.com/openutau/OpenUtau/releases) への案内を出して止まります。
+- このブランチ (`release-kit`) には配布用の設定だけがあります。説明文は [`packaging/`](packaging) の部品から、この README・Release の本文・同梱の説明書を組み立てています。最後に配布した版は [`state/last-build.json`](state/last-build.json) にあります。

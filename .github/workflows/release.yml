@@ -128,13 +128,23 @@ jobs:
           set -euo pipefail
           p=pkg/OpenUtau-NEUTRINO; mkdir -p "$p"
           ditto src/bin/osx-arm64/publish/OpenUtau.app "$p/OpenUtau.app"
-          cp kit/packaging/mac/NEUTRINOを登録.command "$p/"; chmod +x "$p/NEUTRINOを登録.command"
+          cp kit/packaging/mac/NEUTRINOを登録.command kit/packaging/mac/NEUTRINOの登録を解除.command "$p/"
+          chmod +x "$p/NEUTRINOを登録.command" "$p/NEUTRINOの登録を解除.command"
           kit/packaging/compose.sh mac > "$p/はじめにお読みください.md"
           ln -s /Applications "$p/Applications"
           # 登録スクリプトを仮のホームで試す
           fake=$(mktemp -d); ne=$(mktemp -d)/NEUTRINO; mkdir -p "$ne/bin" "$ne/model/TEST"; touch "$ne/bin/neutrino" "$ne/model/TEST/info.toml"
+          xattr -w com.apple.quarantine "0081;00000000;Test;" "$ne/bin/neutrino"   # ダウンロードした状態を真似る
           HOME=$fake /bin/bash "$p/NEUTRINOを登録.command" "$ne"
+          ! xattr -p com.apple.quarantine "$ne/bin/neutrino" 2>/dev/null   # 警告の印が外れている
           test -L "$fake/Library/OpenUtau/Dependencies/NEUTRINO_v3" && grep -q "singer_type: neutrino" "$fake/Library/OpenUtau/Singers/NEUTRINO_TEST/character.yaml"
+          mkdir -p "$ne/model/ADD"; touch "$ne/model/ADD/info.toml"; rm -rf "$ne/model/TEST"      # モデルを足して・消して再実行
+          HOME=$fake /bin/bash "$p/NEUTRINOを登録.command" "$ne"
+          test -d "$fake/Library/OpenUtau/Singers/NEUTRINO_ADD" && test ! -e "$fake/Library/OpenUtau/Singers/NEUTRINO_TEST"
+          before=$(find "$ne" | sort | shasum)
+          HOME=$fake /bin/bash "$p/NEUTRINOの登録を解除.command"
+          test ! -e "$fake/Library/OpenUtau/Dependencies/NEUTRINO_v3" && test ! -e "$fake/Library/OpenUtau/Singers/NEUTRINO_ADD"
+          [ "$before" = "$(find "$ne" | sort | shasum)" ]   # 解除しても NEUTRINO は1つも消えない
           hdiutil create -volname OpenUtau-NEUTRINO -srcfolder "$p" -format UDZO -ov OpenUtau-NEUTRINO-macos-arm64.dmg
           codesign -fs - OpenUtau-NEUTRINO-macos-arm64.dmg
       - uses: actions/upload-artifact@v4
@@ -181,7 +191,7 @@ jobs:
           set -euo pipefail
           p=pkg/OpenUtau-NEUTRINO
           test -f "$p/OpenUtau.exe"
-          cp kit/packaging/windows/register-neutrino.ps1 kit/packaging/windows/register-neutrino.bat "$p/"
+          cp kit/packaging/windows/*.ps1 kit/packaging/windows/*.bat "$p/"
           kit/packaging/compose.sh windows > "$p/はじめにお読みください.md"
       - name: Try the register script with a fake NEUTRINO
         shell: pwsh
@@ -195,6 +205,18 @@ jobs:
           if ((Get-Item "$t\Dependencies\NEUTRINO_v3").LinkType -ne "Junction") { exit 1 }
           if (-not (Select-String -Quiet "singer_type: neutrino" "$t\Singers\NEUTRINO_TEST\character.yaml")) { exit 1 }
           if (-not (Test-Path "$t\Singers\NEUTRINO_TEST\t.bin")) { exit 1 }
+          # モデルを足して・消して再実行
+          New-Item -ItemType Directory -Force -Path "$ne\model\ADD" | Out-Null; Set-Content "$ne\model\ADD\info.toml" "x"
+          Remove-Item -Recurse -Force "$ne\model\TEST"
+          powershell -NoProfile -ExecutionPolicy Bypass -File "$t\register-neutrino.ps1" -Neutrino "$ne"
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          if (-not (Test-Path "$t\Singers\NEUTRINO_ADD") -or (Test-Path "$t\Singers\NEUTRINO_TEST")) { exit 1 }
+          # 解除しても NEUTRINO は1つも消えない
+          $before = (Get-ChildItem -Recurse $ne | ForEach-Object FullName) -join "|"
+          powershell -NoProfile -ExecutionPolicy Bypass -File "$t\unregister-neutrino.ps1"
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          if ((Test-Path "$t\Dependencies\NEUTRINO_v3") -or (Test-Path "$t\Singers\NEUTRINO_ADD")) { exit 1 }
+          if ($before -ne ((Get-ChildItem -Recurse $ne | ForEach-Object FullName) -join "|")) { Write-Host "NEUTRINO was modified"; exit 1 }
           Remove-Item -Recurse -Force $t
       - name: Zip
         run: cd pkg && 7z a -tzip ../OpenUtau-NEUTRINO-win-x64.zip OpenUtau-NEUTRINO
@@ -218,7 +240,7 @@ jobs:
           set -euo pipefail
           short=${SOURCE_SHA:0:8}
           tag="neutrino-$(date -u +%Y%m%d)-${short}-r${{ github.run_number }}"
-          packaging/compose.sh all > notes.md
+          packaging/compose.sh release > notes.md
           { echo; echo "## ファイル"; echo; echo '```'; (cd dist && sha256sum *); echo '```'; } >> notes.md
           gh release create "$tag" dist/* --target "$GITHUB_REF_NAME" --latest \
             --title "OpenUtau NEUTRINO対応版 ${SOURCE_DATE} (${short})" --notes-file notes.md
