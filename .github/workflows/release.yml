@@ -239,14 +239,23 @@ jobs:
         run: |
           set -euo pipefail
           short=${SOURCE_SHA:0:8}
-          tag="neutrino-$(date -u +%Y%m%d)-${short}-r${{ github.run_number }}"
+          # Release は元のソースのコミットごとに1つ。同じソースで作り直した時は、増やさずに中身を差し替える。
+          tag="neutrino-${short}"
+          title="OpenUtau NEUTRINO対応版 ${SOURCE_DATE} (${short})"
           packaging/compose.sh release > notes.md
           { echo; echo "## ファイル"; echo; echo '```'; (cd dist && sha256sum *); echo '```'; } >> notes.md
-          gh release create "$tag" dist/* --target "$GITHUB_REF_NAME" --latest \
-            --title "OpenUtau NEUTRINO対応版 ${SOURCE_DATE} (${short})" --notes-file notes.md
+          if gh release view "$tag" > /dev/null 2>&1; then
+            gh release upload "$tag" dist/* --clobber
+            gh release edit "$tag" --title "$title" --notes-file notes.md --latest
+          else
+            gh release create "$tag" dist/* --target "$GITHUB_REF_NAME" --latest --title "$title" --notes-file notes.md
+          fi
           jq -n --arg sha "$SOURCE_SHA" --arg tag "$tag" --arg repo "$SOURCE_REPO" --arg ref "$SOURCE_REF" \
             '{source_repo:$repo, source_ref:$ref, source_sha:$sha, release_tag:$tag}' > state/last-build.json
           packaging/compose.sh readme > README.md
           git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add state/last-build.json README.md && git commit -m "chore: ${tag} を配布"
-          git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME"
+          git add state/last-build.json README.md
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: ${tag} を配布"
+            git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
