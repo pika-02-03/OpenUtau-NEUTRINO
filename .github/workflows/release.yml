@@ -217,7 +217,7 @@ jobs:
         run: |
           set -euo pipefail
           short=${SOURCE_SHA:0:8}
-          tag="neutrino-$(date -u +%Y%m%d)-${short}"
+          tag="neutrino-$(date -u +%Y%m%d)-${short}-r${{ github.run_number }}"
           packaging/compose.sh all > notes.md
           { echo; echo "## ファイル"; echo; echo '```'; (cd dist && sha256sum *); echo '```'; } >> notes.md
           gh release create "$tag" dist/* --target "$GITHUB_REF_NAME" --latest \
