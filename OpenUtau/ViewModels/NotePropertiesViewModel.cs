@@ -694,8 +694,16 @@ namespace OpenUtau.App.ViewModels {
                 if (track.TryGetExpDescriptor(DocManager.Inst.Project, abbr, out UExpressionDescriptor descriptor) && descriptor.defaultValue == value) {
                     value = null;
                 }
+                // 句ごとの声・歌い方は句全体に効くので、選んだ音符の句の音符全部に同じ値を入れる
+                var targets = OpenUtau.Core.Render.PhraseVoice.IsPhraseWide(abbr)
+                    ? OpenUtau.Core.Render.PhraseVoice.NotesInSamePhrases(Part, selectedNotes)
+                    : selectedNotes;
                 DocManager.Inst.StartUndoGroup("command.exp.edit");
-                DocManager.Inst.ExecuteCmd(new SetNotesSameExpressionCommand(DocManager.Inst.Project, track, Part, selectedNotes, abbr, value));
+                DocManager.Inst.ExecuteCmd(new SetNotesSameExpressionCommand(DocManager.Inst.Project, track, Part, targets, abbr, value));
+                // 歌い方は direct on の句でしか効かないので、選んだら句の音符全部の direct を on にする (同じ取り消しの単位)
+                if (OpenUtau.Core.Neutrino.NeutrinoTeacher.TurnsDirectOn(abbr, value, descriptor)) {
+                    DocManager.Inst.ExecuteCmd(new SetNotesSameExpressionCommand(DocManager.Inst.Project, track, Part, targets, OpenUtau.Core.Format.Ustx.DIR, 1));
+                }
                 DocManager.Inst.EndUndoGroup();
             }
         }
