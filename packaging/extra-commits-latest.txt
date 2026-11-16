@@ -17,11 +17,11 @@ d7eecf5b40439b3cf7619f903d80e22e50a64963 pika-02-03/OpenUtau-NEUTRINO cli 6/9 (s
 d239c976455a011777536d781b86a34a999c0267 pika-02-03/OpenUtau-NEUTRINO cli 9/9 (のまま)
 72d4e4c59b260962c244e7dfff493e70737cfdaa pika-02-03/OpenUtau-NEUTRINO cli-neutrino 配布版に合わせる直し (固定版の bc287690 と同じ)
 59140887d54937c14a8c97eec0546ad8a9bced65 pika-02-03/OpenUtau-NEUTRINO teacher VOICEVOX: 204 No Content を空の JSON として読む (初めて使うスタイルの句が落ちていた)
-b7be2600524443e90996255d01209836a5d318b8 pika-02-03/OpenUtau-NEUTRINO teacher 句ごとの声と歌い方
-45c8e3a78b47b948bea9b3b1fbff7e68e7f174fc pika-02-03/OpenUtau-NEUTRINO v3-expr v3 の声のトラックでは 2.x でだけ効く表情を出さない
-c09a9115566e52c7cf53ea77d0bc4f486b07eaa8 pika-02-03/OpenUtau-NEUTRINO teacher-band 効く範囲を帯で見せる
-988cbb17902f02aa101db80b89f0238b5fa34ac5 pika-02-03/OpenUtau-NEUTRINO vv-44100 VOICEVOX を 44100 Hz で受ける
-68f4a04c24bb1b2a88ed31604aff812aaca2ba33 pika-02-03/OpenUtau-NEUTRINO sinc 44100 Hz でない音の読み込みを WDL の sinc で変換
-2d2e6a9d14a29ddbe6d0938318db8d3a69e93310 pika-02-03/OpenUtau-NEUTRINO vv-katakana カタカナの歌詞
-a4d059d453b7d9c226dfe433d46d8bbee30e54f2 pika-02-03/OpenUtau-NEUTRINO vv-lyrics 発音ヒント付きの歌詞 (あっ[a cl])・づ・ー を歌う
-a4fad1eb7401a3580e7447421ae9ccd4a885ea97 pika-02-03/OpenUtau-NEUTRINO style-f0 歌い方の掛け具合・平滑・語尾の上限
+01656bd2fdf8e000789cefe8f555c28ab5525afd pika-02-03/OpenUtau-NEUTRINO teacher 句ごとの声と歌い方
+1212db67e9633f1efd48e9db098e1b98fddc190d pika-02-03/OpenUtau-NEUTRINO v3-expr v3 の声のトラックでは 2.x でだけ効く表情を出さない
+aa61eb58820393a82f6c7f379863cf4cc335faf9 pika-02-03/OpenUtau-NEUTRINO teacher-band 効く範囲を帯で見せる
+6f74e0e6f2272baf41458a16d0d1a067877fec2d pika-02-03/OpenUtau-NEUTRINO vv-44100 VOICEVOX を 44100 Hz で受ける
+edce1f9fdc783d2de0583e4da5fcfa33c2f49783 pika-02-03/OpenUtau-NEUTRINO sinc 44100 Hz でない音の読み込みを WDL の sinc で変換
+2b58fd53c5bd0cdd920f853050071d6c84f7384d pika-02-03/OpenUtau-NEUTRINO vv-katakana カタカナの歌詞
+e457d7d4547153da24ebf49f80f058ebb45b9716 pika-02-03/OpenUtau-NEUTRINO vv-lyrics 発音ヒント付きの歌詞 (あっ[a cl])・づ・ー を歌う
+8f5116e5478039b6162c09d8a990266038b468b8 pika-02-03/OpenUtau-NEUTRINO style-f0 歌い方の掛け具合・平滑・語尾の上限

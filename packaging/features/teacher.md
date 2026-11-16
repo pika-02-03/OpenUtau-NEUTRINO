@@ -8,6 +8,7 @@
 | `singing style (phrase)` | 歌い方 = 音程の線(VOICEVOX では音量も)を借りる NEUTRINO の歌手 | NEUTRINO の KIRITAN |
 
 - 歌い方は、NEUTRINO 本体のサポートモデル(`-S`)と同じ働き。
+- 歌い方を選ぶと、その句の `direct` も自動で on になる(off のままだと歌い方の線が使われない)。
 - その上に、自分のビブラート・PITD も足せる。
 - 選んだ句の上には「声 … ・ 歌い方 …」の青い帯が出て、効く範囲が分かる。
 
