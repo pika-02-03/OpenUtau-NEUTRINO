@@ -18,22 +18,22 @@
     "e4814b9629181e60d6f2478c9180119cdc6c3cf3",
     "bc287690e45642c69ceaccc64dba139bdef9b9fa",
     "7eea7f8b366ae440969d9224ab787ab1ed26fde4",
-    "9db74e93343dc5b6844033d634240c2d424d796d",
-    "140d82a44dce0022422d8c3fe9b9aefe2cd4ec81",
-    "a0fa3c3f9003ba20266797e5b9dce49f5ea74b2e",
-    "a8caffe37771ff04254b663d43a1ce950c7b1980",
-    "1dcba0c580497100abc76944384ff25256bad9ff",
-    "9ee0b068236018bed4f9e568271b8efb7d4c7167",
-    "53b8bdce2c7cd2fbf362b7950d8211da43487361",
-    "d3e3d5acdc8950b2ea5adc5d84dd2e5389738e03"
+    "254c5d080e020d9379d6b38b262e0be2ffea8cdf",
+    "93924e37a7dc34468e8180e55371f8264ff87b2c",
+    "66fc0a897258fe65c1d1a73503a1e888254a378c",
+    "80260a2ae015fa55f9facd592c3826addac6c883",
+    "4aca88036dea1750f4d996df8545e78dea292468",
+    "0ce80d9ac3e437501b6bd3f21f46afc9fd8262f0",
+    "ec9d6c63ec6db7e19619ff401177f61d7197f72d",
+    "6728893e8d7a3f2e1ae72be04f91022ba7dd072e"
   ],
   "version": "0.1.570.3",
-  "release_tag": "neutrino-20261110",
+  "release_tag": "neutrino-20261120",
   "latest": {
     "source_sha": "203c44f5d1374697abfa69626a2b52a19627184b",
     "upstream_repo": "openutau/OpenUtau",
-    "upstream_sha": "2005b9670ac312aaf0bbf2b42767fb70fe9185dd",
-    "upstream_date": "2026-11-09",
+    "upstream_sha": "08222cb7c48c4ab47faa34a6efc34e2c00898a1e",
+    "upstream_date": "2026-11-16",
     "extra_commits": [
       "7b8ebd790b6c5a7f7a91c14c339eb70f136b4d25",
       "f6f6ae32d2e7655638e7817a247ba217676dd7a1",
@@ -50,16 +50,16 @@
       "d239c976455a011777536d781b86a34a999c0267",
       "72d4e4c59b260962c244e7dfff493e70737cfdaa",
       "59140887d54937c14a8c97eec0546ad8a9bced65",
-      "b7be2600524443e90996255d01209836a5d318b8",
-      "45c8e3a78b47b948bea9b3b1fbff7e68e7f174fc",
-      "c09a9115566e52c7cf53ea77d0bc4f486b07eaa8",
-      "988cbb17902f02aa101db80b89f0238b5fa34ac5",
-      "68f4a04c24bb1b2a88ed31604aff812aaca2ba33",
-      "2d2e6a9d14a29ddbe6d0938318db8d3a69e93310",
-      "a4d059d453b7d9c226dfe433d46d8bbee30e54f2",
-      "a4fad1eb7401a3580e7447421ae9ccd4a885ea97"
+      "01656bd2fdf8e000789cefe8f555c28ab5525afd",
+      "1212db67e9633f1efd48e9db098e1b98fddc190d",
+      "aa61eb58820393a82f6c7f379863cf4cc335faf9",
+      "6f74e0e6f2272baf41458a16d0d1a067877fec2d",
+      "edce1f9fdc783d2de0583e4da5fcfa33c2f49783",
+      "2b58fd53c5bd0cdd920f853050071d6c84f7384d",
+      "e457d7d4547153da24ebf49f80f058ebb45b9716",
+      "8f5116e5478039b6162c09d8a990266038b468b8"
     ],
-    "version": "0.1.577.10",
-    "release_tag": "neutrino-20261110"
+    "version": "0.1.577.11",
+    "release_tag": "neutrino-20261120"
   }
 }

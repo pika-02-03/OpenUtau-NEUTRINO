@@ -13,7 +13,7 @@
 | | 中身 | Mac | Windows(動作未確認) |
 |---|---|---|---|
 | **固定版** | OpenUtau 0.1.570.3。NEUTRINO 対応の PR のまま | [dmg](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-macos-arm64.dmg) | [zip](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-win-x64.zip) |
-| **最新版** | 本家の最新 0.1.577.10 を混ぜた物。動作保証なし | [dmg](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-latest-macos-arm64.dmg) | [zip](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-latest-win-x64.zip) |
+| **最新版** | 本家の最新 0.1.577.11 を混ぜた物。動作保証なし | [dmg](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-latest-macos-arm64.dmg) | [zip](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases/latest/download/OpenUtau-NEUTRINO-latest-win-x64.zip) |
 
 入れるのはどちらか一方です。
 前に出した版は [Releases](https://github.com/pika-02-03/OpenUtau-NEUTRINO/releases) に残しています(名前に中の OpenUtau の版)。動かなくなった時は、そこから前の版を入れ直してください。
@@ -103,13 +103,13 @@ NEUTRINO      ← これが「NEUTRINO のフォルダ」
 | [**聞こえる音程が画面の線に出る**](#pitch-line)<br>[ca70f8be](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/ca70f8bedb679aba8f5994904ad2276b9ab7165a) | direct の所でも、灰色の線は OpenUtau 側の音程で、聞こえる音と食い違う | 実際に鳴る音程を描く。線を見ながら PITD を描き足せる |
 | **Mac で Shift+ホイールの横スクロール**<br>[502e607c](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/502e607cf137ce42fd6a7882581ba20e4a6fca9b) | Mac では Shift を押しても縦に動く | ピアノロールとトラックの画面で横に動く |
 | **画面を開かずに書き出す(CLI)**<br>[8c0789a5](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/8c0789a5f65dbf43b82039629d9e4c294adaba0b) ほか 8 本 | OpenUtau を起動しないと書き出せない | コマンド 1 行で ustx → wav(使い方は上) |
-| [**句ごとに声と歌い方を選ぶ**](#teacher)<br>[59140887](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/59140887d54937c14a8c97eec0546ad8a9bced65) [b7be2600](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/b7be2600524443e90996255d01209836a5d318b8) | 1 トラックは 1 つの声・歌い方 | 句ごとに選べる。例: VOICEVOX のずんだもんの声で、NEUTRINO の KIRITAN の歌い方 |
-| **どの句をどの声・歌い方で歌うかが見える**<br>[c09a9115](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/c09a9115566e52c7cf53ea77d0bc4f486b07eaa8) | — | 句の上に「声 … ・ 歌い方 …」の帯が出る |
-| [**歌い方の効き具合を句ごとに整える**](#style-f0)<br>[a4fad1eb](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/a4fad1eb7401a3580e7447421ae9ccd4a885ea97) | — | 調声の量・線の均し・語尾の落ちを、句ごとに数字で |
-| **VOICEVOX の音を 44.1 kHz で受ける**<br>[988cbb17](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/988cbb17902f02aa101db80b89f0238b5fa34ac5) | 24 kHz で受けて OpenUtau 側で上げるので、8 kHz より上が 10〜18 dB 削れる | 削れない |
-| **44.1 kHz でない音を sinc で変換する**<br>[68f4a04c](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/68f4a04c24bb1b2a88ed31604aff812aaca2ba33) | 48 kHz の伴奏などは線形補間で、16 kHz で −11 dB・18 kHz で −21 dB 削れ、1〜2 標本遅れる | 削れず遅れない(NAudio の次の版の既定と同じ設定) |
-| **VOICEVOX でカタカナの歌詞も歌う**<br>[2d2e6a9d](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/2d2e6a9d14a29ddbe6d0938318db8d3a69e93310) | カタカナの音符は黙って休符 | 歌う |
-| **VOICEVOX で `あっ[a cl]`・`づ`・`ー` も歌う**<br>[a4d059d4](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/a4d059d453b7d9c226dfe433d46d8bbee30e54f2) | 黙って休符になり無音 | 歌う(`あっ` は「あ」「っ」に分け、`ー` は前の音の母音) |
+| [**句ごとに声と歌い方を選ぶ**](#teacher)<br>[59140887](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/59140887d54937c14a8c97eec0546ad8a9bced65) [01656bd2](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/01656bd2fdf8e000789cefe8f555c28ab5525afd) | 1 トラックは 1 つの声・歌い方 | 句ごとに選べる。例: VOICEVOX のずんだもんの声で、NEUTRINO の KIRITAN の歌い方 |
+| **どの句をどの声・歌い方で歌うかが見える**<br>[aa61eb58](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/aa61eb58820393a82f6c7f379863cf4cc335faf9) | — | 句の上に「声 … ・ 歌い方 …」の帯が出る |
+| [**歌い方の効き具合を句ごとに整える**](#style-f0)<br>[8f5116e5](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/8f5116e5478039b6162c09d8a990266038b468b8) | — | 調声の量・線の均し・語尾の落ちを、句ごとに数字で |
+| **VOICEVOX の音を 44.1 kHz で受ける**<br>[6f74e0e6](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/6f74e0e6f2272baf41458a16d0d1a067877fec2d) | 24 kHz で受けて OpenUtau 側で上げるので、8 kHz より上が 10〜18 dB 削れる | 削れない |
+| **44.1 kHz でない音を sinc で変換する**<br>[edce1f9f](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/edce1f9fdc783d2de0583e4da5fcfa33c2f49783) | 48 kHz の伴奏などは線形補間で、16 kHz で −11 dB・18 kHz で −21 dB 削れ、1〜2 標本遅れる | 削れず遅れない(NAudio の次の版の既定と同じ設定) |
+| **VOICEVOX でカタカナの歌詞も歌う**<br>[2b58fd53](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/2b58fd53c5bd0cdd920f853050071d6c84f7384d) | カタカナの音符は黙って休符 | 歌う |
+| **VOICEVOX で `あっ[a cl]`・`づ`・`ー` も歌う**<br>[e457d7d4](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/e457d7d4547153da24ebf49f80f058ebb45b9716) | 黙って休符になり無音 | 歌う(`あっ` は「あ」「っ」に分け、`ー` は前の音の母音) |
 
 <a id="mel"></a>
 
@@ -187,6 +187,7 @@ direct の句でも、ピアノロールの線は実際に鳴る音程です。�
 | `singing style (phrase)` | 歌い方 = 音程の線(VOICEVOX では音量も)を借りる NEUTRINO の歌手 | NEUTRINO の KIRITAN |
 
 - 歌い方は、NEUTRINO 本体のサポートモデル(`-S`)と同じ働き。
+- 歌い方を選ぶと、その句の `direct` も自動で on になる(off のままだと歌い方の線が使われない)。
 - その上に、自分のビブラート・PITD も足せる。
 - 選んだ句の上には「声 … ・ 歌い方 …」の青い帯が出て、効く範囲が分かる。
 
@@ -243,7 +244,7 @@ direct の句でも、ピアノロールの線は実際に鳴る音程です。�
 
 | | 重ねた物 | 中身 |
 |---|---|---|
-| 1 | 本家 [OpenUtau](https://github.com/openutau/OpenUtau) | 固定版は 0.1.570.3(2 が取り込んだ版)、最新版は 0.1.577.10(本家 `master` の [2005b967](https://github.com/openutau/OpenUtau/commit/2005b9670ac312aaf0bbf2b42767fb70fe9185dd)、2026-11-09)。VOICEVOX で歌う機能はここに元からある |
+| 1 | 本家 [OpenUtau](https://github.com/openutau/OpenUtau) | 固定版は 0.1.570.3(2 が取り込んだ版)、最新版は 0.1.577.11(本家 `master` の [08222cb7](https://github.com/openutau/OpenUtau/commit/08222cb7c48c4ab47faa34a6efc34e2c00898a1e)、2026-11-16)。VOICEVOX で歌う機能はここに元からある |
 | 2 | NEUTRINO 対応 | rokujyushi さんの PR [openutau/OpenUtau#2136](https://github.com/openutau/OpenUtau/pull/2136)。[rokujyushi/OpenUtau](https://github.com/rokujyushi/OpenUtau/tree/neutrino) の `neutrino` ブランチ([203c44f5](https://github.com/rokujyushi/OpenUtau/commit/203c44f5d1374697abfa69626a2b52a19627184b)) |
 | 3 | 画面なしの書き出し(CLI) | christianazinn さんの PR [openutau/OpenUtau#2162](https://github.com/openutau/OpenUtau/pull/2162) を、NEUTRINO 対応版で動くように直した物 |
 | 4 | この版で足した機能 | 上の「[足した機能](#足した機能)」 |
@@ -272,14 +273,14 @@ git clone -b neutrino-cli-dist https://github.com/pika-02-03/OpenUtau-NEUTRINO.g
 | Mac で Shift+ホイールの横スクロール | この repo | [4e6c5f7c](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/4e6c5f7c3e890da4d003b5d8f39653b74ef7789a) | [502e607c](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/502e607cf137ce42fd6a7882581ba20e4a6fca9b) | [`openutau-fix/mac-shift-wheel`](https://github.com/pika-02-03/OpenUtau-NEUTRINO/tree/openutau-fix/mac-shift-wheel) [8ae718f2](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/8ae718f25761df64901baa24d631c58a61ee9937) |
 | 画面を開かずに書き出す(CLI) | christianazinn さんの PR [openutau/OpenUtau#2162](https://github.com/openutau/OpenUtau/pull/2162)(コミットはこの repo に写してある) | [003f50ed](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/003f50ede862081ee40e86dbc43c53930eb74ef4) ほか 8 本 | [8c0789a5](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/8c0789a5f65dbf43b82039629d9e4c294adaba0b) ほか 8 本 |  |
 | CLI を NEUTRINO 対応版で動かす直し | この repo | [bc287690](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/bc287690e45642c69ceaccc64dba139bdef9b9fa) | [72d4e4c5](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/72d4e4c59b260962c244e7dfff493e70737cfdaa) |  |
-| 句ごとに声と歌い方を選ぶ | この repo | [7eea7f8b](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/7eea7f8b366ae440969d9224ab787ab1ed26fde4) [9db74e93](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/9db74e93343dc5b6844033d634240c2d424d796d) | [59140887](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/59140887d54937c14a8c97eec0546ad8a9bced65) [b7be2600](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/b7be2600524443e90996255d01209836a5d318b8) |  |
-| どの句をどの声・歌い方で歌うかが見える | この repo | [a0fa3c3f](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/a0fa3c3f9003ba20266797e5b9dce49f5ea74b2e) | [c09a9115](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/c09a9115566e52c7cf53ea77d0bc4f486b07eaa8) |  |
-| 歌い方の効き具合を句ごとに整える | この repo | [d3e3d5ac](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/d3e3d5acdc8950b2ea5adc5d84dd2e5389738e03) | [a4fad1eb](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/a4fad1eb7401a3580e7447421ae9ccd4a885ea97) |  |
-| NEUTRINO v3 の声のトラックでは、2.x でだけ効く表情(engine type・engine mode・tone shift)を出さない | この repo | [140d82a4](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/140d82a44dce0022422d8c3fe9b9aefe2cd4ec81) | [45c8e3a7](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/45c8e3a78b47b948bea9b3b1fbff7e68e7f174fc) |  |
-| VOICEVOX の音を 44.1 kHz で受ける | この repo | [a8caffe3](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/a8caffe37771ff04254b663d43a1ce950c7b1980) | [988cbb17](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/988cbb17902f02aa101db80b89f0238b5fa34ac5) | [`openutau-fix/voicevox-44100`](https://github.com/pika-02-03/OpenUtau-NEUTRINO/tree/openutau-fix/voicevox-44100) [76f51a7f](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/76f51a7faed1642bce3b648ec270ee2638a0f35b) |
-| 44.1 kHz でない音を sinc で変換する | この repo | [1dcba0c5](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/1dcba0c580497100abc76944384ff25256bad9ff) | [68f4a04c](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/68f4a04c24bb1b2a88ed31604aff812aaca2ba33) | [`openutau-fix/sinc-resampling`](https://github.com/pika-02-03/OpenUtau-NEUTRINO/tree/openutau-fix/sinc-resampling) [c94ffe8a](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/c94ffe8ad1daca46048d878bf49bb5bf00c11ff7) |
-| VOICEVOX でカタカナの歌詞も歌う | この repo | [9ee0b068](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/9ee0b068236018bed4f9e568271b8efb7d4c7167) | [2d2e6a9d](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/2d2e6a9d14a29ddbe6d0938318db8d3a69e93310) | [`openutau-fix/voicevox-katakana-lyrics`](https://github.com/pika-02-03/OpenUtau-NEUTRINO/tree/openutau-fix/voicevox-katakana-lyrics) [e522d9f0](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/e522d9f09f476796efb00d0d582552dbcb1da546) |
-| VOICEVOX で `あっ[a cl]`・`づ`・`ー` も歌う | この repo | [53b8bdce](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/53b8bdce2c7cd2fbf362b7950d8211da43487361) | [a4d059d4](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/a4d059d453b7d9c226dfe433d46d8bbee30e54f2) |  |
+| 句ごとに声と歌い方を選ぶ | この repo | [7eea7f8b](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/7eea7f8b366ae440969d9224ab787ab1ed26fde4) [254c5d08](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/254c5d080e020d9379d6b38b262e0be2ffea8cdf) | [59140887](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/59140887d54937c14a8c97eec0546ad8a9bced65) [01656bd2](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/01656bd2fdf8e000789cefe8f555c28ab5525afd) |  |
+| どの句をどの声・歌い方で歌うかが見える | この repo | [66fc0a89](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/66fc0a897258fe65c1d1a73503a1e888254a378c) | [aa61eb58](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/aa61eb58820393a82f6c7f379863cf4cc335faf9) |  |
+| 歌い方の効き具合を句ごとに整える | この repo | [6728893e](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/6728893e8d7a3f2e1ae72be04f91022ba7dd072e) | [8f5116e5](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/8f5116e5478039b6162c09d8a990266038b468b8) |  |
+| NEUTRINO v3 の声のトラックでは、2.x でだけ効く表情(engine type・engine mode・tone shift)を出さない | この repo | [93924e37](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/93924e37a7dc34468e8180e55371f8264ff87b2c) | [1212db67](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/1212db67e9633f1efd48e9db098e1b98fddc190d) |  |
+| VOICEVOX の音を 44.1 kHz で受ける | この repo | [80260a2a](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/80260a2ae015fa55f9facd592c3826addac6c883) | [6f74e0e6](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/6f74e0e6f2272baf41458a16d0d1a067877fec2d) | [`openutau-fix/voicevox-44100`](https://github.com/pika-02-03/OpenUtau-NEUTRINO/tree/openutau-fix/voicevox-44100) [76f51a7f](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/76f51a7faed1642bce3b648ec270ee2638a0f35b) |
+| 44.1 kHz でない音を sinc で変換する | この repo | [4aca8803](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/4aca88036dea1750f4d996df8545e78dea292468) | [edce1f9f](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/edce1f9fdc783d2de0583e4da5fcfa33c2f49783) | [`openutau-fix/sinc-resampling`](https://github.com/pika-02-03/OpenUtau-NEUTRINO/tree/openutau-fix/sinc-resampling) [c94ffe8a](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/c94ffe8ad1daca46048d878bf49bb5bf00c11ff7) |
+| VOICEVOX でカタカナの歌詞も歌う | この repo | [0ce80d9a](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/0ce80d9ac3e437501b6bd3f21f46afc9fd8262f0) | [2b58fd53](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/2b58fd53c5bd0cdd920f853050071d6c84f7384d) | [`openutau-fix/voicevox-katakana-lyrics`](https://github.com/pika-02-03/OpenUtau-NEUTRINO/tree/openutau-fix/voicevox-katakana-lyrics) [e522d9f0](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/e522d9f09f476796efb00d0d582552dbcb1da546) |
+| VOICEVOX で `あっ[a cl]`・`づ`・`ー` も歌う | この repo | [ec9d6c63](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/ec9d6c63ec6db7e19619ff401177f61d7197f72d) | [e457d7d4](https://github.com/pika-02-03/OpenUtau-NEUTRINO/commit/e457d7d4547153da24ebf49f80f058ebb45b9716) |  |
 
 コミットが 3 本以上の物は先頭だけ載せています。全部の並びは上の extra-commits.txt・extra-commits-latest.txt にあります。
 
